@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "Compliance.API\\Compliance.API.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "Compliance.Auth\\Compliance.Auth.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]
