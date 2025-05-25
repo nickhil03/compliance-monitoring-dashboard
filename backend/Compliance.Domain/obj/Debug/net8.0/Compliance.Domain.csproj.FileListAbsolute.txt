@@ -11,3 +11,16 @@ C:\Users\ASUS\source\repos\ComplianceMonitoring\Compliance.Domain\obj\Debug\net8
 C:\Users\ASUS\source\repos\ComplianceMonitoring\Compliance.Domain\obj\Debug\net8.0\ref\Compliance.Domain.dll
 C:\Users\ASUS\source\repos\ComplianceMonitoring\Compliance.Domain\obj\Debug\net8.0\Compliance.Domain.csproj.AssemblyReference.cache
 C:\Users\ASUS\source\repos\ComplianceMonitoring\Compliance.Domain\obj\Debug\net8.0\Compliance.Domain.sourcelink.json
+C:\Users\ASUS\source\repos\compliance-monitoring-dashboard\backend\Compliance.Domain\bin\Debug\net8.0\Compliance.Domain.deps.json
+C:\Users\ASUS\source\repos\compliance-monitoring-dashboard\backend\Compliance.Domain\bin\Debug\net8.0\Compliance.Domain.dll
+C:\Users\ASUS\source\repos\compliance-monitoring-dashboard\backend\Compliance.Domain\bin\Debug\net8.0\Compliance.Domain.pdb
+C:\Users\ASUS\source\repos\compliance-monitoring-dashboard\backend\Compliance.Domain\obj\Debug\net8.0\Compliance.Domain.csproj.AssemblyReference.cache
+C:\Users\ASUS\source\repos\compliance-monitoring-dashboard\backend\Compliance.Domain\obj\Debug\net8.0\Compliance.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ASUS\source\repos\compliance-monitoring-dashboard\backend\Compliance.Domain\obj\Debug\net8.0\Compliance.Domain.AssemblyInfoInputs.cache
+C:\Users\ASUS\source\repos\compliance-monitoring-dashboard\backend\Compliance.Domain\obj\Debug\net8.0\Compliance.Domain.AssemblyInfo.cs
+C:\Users\ASUS\source\repos\compliance-monitoring-dashboard\backend\Compliance.Domain\obj\Debug\net8.0\Compliance.Domain.csproj.CoreCompileInputs.cache
+C:\Users\ASUS\source\repos\compliance-monitoring-dashboard\backend\Compliance.Domain\obj\Debug\net8.0\Compliance.Domain.sourcelink.json
+C:\Users\ASUS\source\repos\compliance-monitoring-dashboard\backend\Compliance.Domain\obj\Debug\net8.0\Compliance.Domain.dll
+C:\Users\ASUS\source\repos\compliance-monitoring-dashboard\backend\Compliance.Domain\obj\Debug\net8.0\refint\Compliance.Domain.dll
+C:\Users\ASUS\source\repos\compliance-monitoring-dashboard\backend\Compliance.Domain\obj\Debug\net8.0\Compliance.Domain.pdb
+C:\Users\ASUS\source\repos\compliance-monitoring-dashboard\backend\Compliance.Domain\obj\Debug\net8.0\ref\Compliance.Domain.dll
