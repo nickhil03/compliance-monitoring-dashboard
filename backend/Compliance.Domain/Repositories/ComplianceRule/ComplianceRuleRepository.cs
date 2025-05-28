@@ -1,9 +1,9 @@
 ﻿using Compliance.Domain.Entities;
 using MongoDB.Driver;
 
-namespace Compliance.Domain.Repositories
+namespace Compliance.Domain.Repositories.ComplianceRule
 {
-    public class MongoRepository(IMongoDatabase database, string collectionName) : IMongoRepository
+    public class ComplianceRuleRepository(IMongoDatabase database, string collectionName) : IComplianceRuleRepository
     {
         private readonly IMongoCollection<ComplianceResult> _collection = database.GetCollection<ComplianceResult>(collectionName);
 

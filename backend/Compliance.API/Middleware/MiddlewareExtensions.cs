@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Builder;
-
 namespace Compliance.API.Middleware
 {
     public static class MiddlewareExtensions

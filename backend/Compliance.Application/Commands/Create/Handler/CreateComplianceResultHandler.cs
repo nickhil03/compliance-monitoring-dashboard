@@ -1,9 +1,11 @@
-﻿using Compliance.Domain.Entities;
+﻿using Compliance.Application.Commands.Create.Command;
+using Compliance.Domain.Entities;
+using Compliance.Domain.Repositories.ComplianceRule;
 using MediatR;
 
-namespace Compliance.Application.Commands.Create;
+namespace Compliance.Application.Commands.Create.Handler;
 
-public class CreateComplianceResultHandler(IMongoRepository repository) : IRequestHandler<CreateComplianceResultCommand, ComplianceResult>
+public class CreateComplianceResultHandler(IComplianceRuleRepository repository) : IRequestHandler<CreateComplianceResultCommand, ComplianceResult>
 {
     public async Task<ComplianceResult> Handle(CreateComplianceResultCommand request, CancellationToken cancellationToken)
     {

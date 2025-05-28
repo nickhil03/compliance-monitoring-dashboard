@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System.Text.Json;
 
 namespace Compliance.API.Middleware
@@ -23,10 +24,10 @@ namespace Compliance.API.Middleware
                         if (validationResult?.RootElement.GetProperty("isValid").GetBoolean() == true)
                         {
                             var claims = validationResult.RootElement.GetProperty("claims").EnumerateArray()
-                                .Select(claim => new System.Security.Claims.Claim(claim.GetProperty("Type").GetString()!, claim.GetProperty("Value").GetString()!));
+                                .Select(claim => new Claim(claim.GetProperty("Type").GetString()!, claim.GetProperty("Value").GetString()!));
 
-                            var identity = new System.Security.Claims.ClaimsIdentity(claims, "Custom");
-                            context.User = new System.Security.Claims.ClaimsPrincipal(identity);
+                            var identity = new ClaimsIdentity(claims, "Bearer");
+                            context.User = new ClaimsPrincipal(identity);
 
                             await _next(context); // Token is valid, proceed to the API endpoint
                             return;

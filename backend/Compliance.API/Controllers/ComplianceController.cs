@@ -1,7 +1,7 @@
-﻿using Compliance.Application.Commands.Create;
-using Compliance.Application.Commands.Delete;
-using Compliance.Application.Commands.Update;
-using Compliance.Application.Queries;
+﻿using Compliance.Application.Commands.Create.Command;
+using Compliance.Application.Commands.Delete.Command;
+using Compliance.Application.Commands.Update.Command;
+using Compliance.Application.Queries.Query;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -30,7 +30,6 @@ namespace Compliance.API.Controllers
             var result = await _mediator.Send(new GetComplianceResultByIdQuery(id));
             return Ok(result);
         }
-
 
         [HttpPost("add-compliance")]
         public async Task<IActionResult> Create([FromBody] CreateComplianceResultCommand command)

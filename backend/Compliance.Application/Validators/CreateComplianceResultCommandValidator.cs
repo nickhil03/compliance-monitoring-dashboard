@@ -1,4 +1,4 @@
-﻿using Compliance.Application.Commands.Create;
+﻿using Compliance.Application.Commands.Create.Command;
 using FluentValidation;
 
 namespace Compliance.Application.Validators;

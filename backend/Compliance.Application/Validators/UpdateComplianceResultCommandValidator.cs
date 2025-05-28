@@ -1,4 +1,4 @@
-﻿using Compliance.Application.Commands.Update;
+﻿using Compliance.Application.Commands.Update.Command;
 using FluentValidation;
 
 namespace Compliance.Application.Validators;

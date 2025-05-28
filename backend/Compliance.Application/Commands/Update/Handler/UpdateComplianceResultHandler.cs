@@ -1,13 +1,15 @@
-﻿using Compliance.Domain.Entities;
+﻿using Compliance.Application.Commands.Update.Command;
+using Compliance.Domain.Entities;
+using Compliance.Domain.Repositories.ComplianceRule;
 using MediatR;
 
-namespace Compliance.Application.Commands.Update;
+namespace Compliance.Application.Commands.Update.Handler;
 
 public class UpdateComplianceResultHandler : IRequestHandler<UpdateComplianceResultCommand, ComplianceResult>
 {
-    private readonly IMongoRepository _repository;
+    private readonly IComplianceRuleRepository _repository;
 
-    public UpdateComplianceResultHandler(IMongoRepository repository)
+    public UpdateComplianceResultHandler(IComplianceRuleRepository repository)
     {
         _repository = repository;
     }
