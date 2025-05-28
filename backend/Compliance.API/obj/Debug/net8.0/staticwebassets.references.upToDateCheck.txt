@@ -1,4 +1,0 @@
-C:\Users\ASUS\source\repos\ComplianceMonitoring\Compliance.Auth\obj\Debug\net8.0\staticwebassets.build.json
-C:\Users\ASUS\source\repos\ComplianceMonitoring\Compliance.Auth\obj\Debug\net8.0\staticwebassets.build.json
-C:\Users\ASUS\source\repos\ComplianceMonitoring\Compliance.Auth\obj\Debug\net8.0\staticwebassets.build.json
-C:\Users\ASUS\source\repos\compliance-monitoring-dashboard\backend\Compliance.Auth\obj\Debug\net8.0\staticwebassets.build.json
