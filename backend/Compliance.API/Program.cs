@@ -67,7 +67,8 @@ builder.Services.AddSingleton<IMongoClient>(sp =>
 builder.Services.AddScoped<IComplianceRuleRepository>(sp =>
 {
     var settings = sp.GetRequiredService<IOptions<MongoDbSettings>>().Value;
-    var database = sp.GetRequiredService<IMongoDatabase>();
+    var client = sp.GetRequiredService<IMongoClient>();
+    var database = client.GetDatabase(settings.Database);
     return new ComplianceRuleRepository(database, settings.CollectionName);
 });
 

@@ -16,7 +16,7 @@ namespace Compliance.API.Middleware
                     using var client = _httpClientFactory.CreateClient();
                     var authServiceUrl = _configuration["AuthServiceUrl"];
 
-                    var response = await client.PostAsJsonAsync($"{authServiceUrl}/api/Auth/validate-token", new { Token = authorizationHeader });
+                    var response = await client.PostAsJsonAsync($"{authServiceUrl}api/Auth/validate", new { Token = authorizationHeader });
 
                     if (response.IsSuccessStatusCode)
                     {
@@ -24,7 +24,7 @@ namespace Compliance.API.Middleware
                         if (validationResult?.RootElement.GetProperty("isValid").GetBoolean() == true)
                         {
                             var claims = validationResult.RootElement.GetProperty("claims").EnumerateArray()
-                                .Select(claim => new Claim(claim.GetProperty("Type").GetString()!, claim.GetProperty("Value").GetString()!));
+                                .Select(claim => new Claim(claim.GetProperty("type").GetString()!, claim.GetProperty("value").GetString()!));
 
                             var identity = new ClaimsIdentity(claims, "Bearer");
                             context.User = new ClaimsPrincipal(identity);
