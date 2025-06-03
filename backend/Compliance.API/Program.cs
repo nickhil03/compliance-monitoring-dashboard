@@ -3,10 +3,13 @@ using Compliance.Application.Queries.Query;
 using Compliance.Application.Validators;
 using Compliance.Domain.Repositories.ComplianceRule;
 using Compliance.Domain.Settings;
+using Compliance.Infrastructure.Messaging.Consumer;
+using Compliance.Infrastructure.Messaging.Publisher;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using RabbitMQ.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -76,6 +79,19 @@ builder.Services.AddMediatR(config =>
 {
     config.RegisterServicesFromAssembly(typeof(GetAllComplianceResultsQuery).Assembly);
 });
+
+//builder.Services.AddSingleton(sp =>
+//{
+//    var factory = new ConnectionFactory
+//    {
+//        HostName = "localhost",
+//        AutomaticRecoveryEnabled = true
+//    };
+//    return (IConnectionFactory)factory.CreateConnectionAsync().GetAwaiter().GetResult();
+//});
+
+//builder.Services.AddSingleton<IRabbitMqPublisher, RabbitMqPublisher>();
+//builder.Services.AddHostedService<RabbitMqConsumerService>();
 
 builder.Services.AddValidatorsFromAssemblyContaining<CreateComplianceResultCommandValidator>();
 builder.Services.AddFluentValidationAutoValidation();

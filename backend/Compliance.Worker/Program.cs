@@ -1,7 +1,7 @@
-using Compliance.Worker;
+using Compliance.Worker.Services;
 
 var builder = Host.CreateApplicationBuilder(args);
-builder.Services.AddHostedService<Worker>();
+builder.Services.AddHostedService<ComplianceEvaluationConsumer>();
 
 var host = builder.Build();
 host.Run();

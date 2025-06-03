@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Compliance.Auth", "Complian
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Compliance.Application", "Compliance.Application\Compliance.Application.csproj", "{0C720526-780E-4374-8E13-4A2D3C90F552}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Compliance.Infrastructure", "Compliance.Infrastructure\Compliance.Infrastructure.csproj", "{48304D09-A6D3-45D9-AC35-AD15BB9B22BB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{0C720526-780E-4374-8E13-4A2D3C90F552}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0C720526-780E-4374-8E13-4A2D3C90F552}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0C720526-780E-4374-8E13-4A2D3C90F552}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48304D09-A6D3-45D9-AC35-AD15BB9B22BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48304D09-A6D3-45D9-AC35-AD15BB9B22BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48304D09-A6D3-45D9-AC35-AD15BB9B22BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48304D09-A6D3-45D9-AC35-AD15BB9B22BB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
