@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
+import { useNavigate } from "react-router-dom";
+import userLoginService from "../services/userLoginService";
 
 const LoginPage = ({ onLoginSuccess }) => {
   const [username, setUsername] = useState("");
@@ -9,19 +10,19 @@ const LoginPage = ({ onLoginSuccess }) => {
 
   const handleLogin = async (e) => {
     try {
+      debugger;
       e.preventDefault();
       setError("");
-      if (username === "user" && password === "password") {
-        console.log("Mock Login successful!");
-        // In a real app, you'd get a token here and store it
-        localStorage.setItem("authToken", "mock_jwt_token_123"); // Simulate storing a token
-        onLoginSuccess(); // Call the function passed from App to update login state
-        navigate("/dashboard"); // Navigate to dashboard on success
-      } else {
-        setError("Invalid username or password.");
+
+      let token = userLoginService(username, password);
+      if (!token) {
+        localStorage.setItem("token", token);
       }
+      onLoginSuccess();
+      navigate("/dashboard");
     } catch (error) {
-      console.error("Error preventing default:", error);
+      console.error("An error occurred:", error);
+      setError("An error occurred during login. Please try again.");
     }
   };
 
