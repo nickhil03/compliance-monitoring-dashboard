@@ -1,14 +1,14 @@
 import "./App.css";
-import LoginPage from "./pages/LoginPage";
-import DashboardPage from "./pages/DashboardPage";
+import AppRoutes from "./routes/AppRoutes"; // Importing the AppRoutes component
 
-function App() {
+const App = () => {
   return (
-    <>
-      <DashboardPage />
-      <LoginPage />
-    </>
+    // Main container for the entire application
+    <div className="min-h-screen bg-gray-100 font-sans antialiased flex flex-col">
+      <script src="https://cdn.tailwindcss.com"></script>
+      <AppRoutes />
+    </div>
   );
-}
+};
 
 export default App;
