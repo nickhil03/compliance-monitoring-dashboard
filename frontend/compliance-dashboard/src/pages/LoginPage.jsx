@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import userLoginService from "../services/userLoginService";
+import userLoginService from "../services/user/userLoginService";
 
 const LoginPage = ({ onLoginSuccess }) => {
   const [username, setUsername] = useState("");
