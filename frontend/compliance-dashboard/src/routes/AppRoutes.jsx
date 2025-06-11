@@ -8,8 +8,8 @@ const AppRoutes = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
 
   // Function to handle successful login from the Login component
-  const handleLoginSuccess = () => {
-    setIsLoggedIn(true);
+  const handleLoginSuccess = (loginStatus) => {
+    setIsLoggedIn(loginStatus);
   };
 
   // Function to handle logout

@@ -10,16 +10,19 @@ const LoginPage = ({ onLoginSuccess }) => {
 
   const handleLogin = async (e) => {
     try {
-      debugger;
       e.preventDefault();
       setError("");
 
-      let token = userLoginService(username, password);
-      if (!token) {
+      let token = await userLoginService(username, password);
+
+      if (token) {
         localStorage.setItem("token", token);
+        onLoginSuccess(true);
+        navigate("/dashboard");
+      } else {
+        setError("Invalid credentials. Please try again.");
+        onLoginSuccess(false);
       }
-      onLoginSuccess();
-      navigate("/dashboard");
     } catch (error) {
       console.error("An error occurred:", error);
       setError("An error occurred during login. Please try again.");
