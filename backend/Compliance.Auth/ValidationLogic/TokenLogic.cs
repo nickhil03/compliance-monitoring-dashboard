@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Compliance.Domain.Model;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -20,16 +21,18 @@ namespace Compliance.Auth.ValidationLogic
             return jwtToken.Claims;
         }
 
-        public string GenerateJwtToken(string username)
+        public string GenerateJwtToken(User user)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-            var claims = new[] {
-                new Claim(ClaimTypes.NameIdentifier, username),
-                new Claim(ClaimTypes.Name, username),
-                // Add other relevant claims here
-            };
+            Claim[] claims = [
+                new (ClaimTypes.NameIdentifier, user.Username),
+                new (ClaimTypes.Name, user.Name),
+                new (ClaimTypes.Email, user.Email),
+                new (ClaimTypes.Sid, user._id.ToString()),
+                new (ClaimTypes.Role, user.Roles ?? "User"), // Default to "User" if no roles are specified
+            ];
 
             // Use the expiry time from configuration or default to 30 minutes
             int expiryMinutes = int.TryParse(_configuration["Jwt:ExpiryMinutes"], out var mins) ? mins : 30;

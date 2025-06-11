@@ -19,12 +19,14 @@ namespace Compliance.Auth.ValidationLogic
         {
             if (await _userRepo.GetUserByUsernameAsync(username) != null)
             {
-                return false; // User already exists
+                return false; // User already exists  
             }
 
             string hashedPassword = BCrypt.Net.BCrypt.HashPassword(password);
             var user = new User
             {
+                _id = new MongoDB.Bson.ObjectId(), // Generate a unique ID  
+                Name = username, // Assuming Name can be set to username  
                 Username = username,
                 Password = hashedPassword
             };

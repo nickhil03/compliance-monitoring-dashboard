@@ -18,10 +18,12 @@ namespace Compliance.Auth.Controllers
             {
                 return Unauthorized(new { message = "Invalid credentials" });
             }
-
-            TokenLogic tokenLogic = new(_configuration);
-            var token = tokenLogic.GenerateJwtToken(request.Username);
-            return Ok(new { token });
+            else
+            {
+                TokenLogic tokenLogic = new(_configuration);
+                var token = tokenLogic.GenerateJwtToken(user.Result);
+                return Ok(new { token });
+            }
         }
 
         [HttpPost("register")]

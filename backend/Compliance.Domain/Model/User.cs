@@ -1,10 +1,14 @@
-﻿namespace Compliance.Domain.Model
+﻿using MongoDB.Bson;
+
+namespace Compliance.Domain.Model
 {
     public class User
-    {
-        public string Id { get; set; }
-        public string Username { get; set; }
-        public string Password { get; set; }
+    {        
+        public required ObjectId _id { get; set; }
+        public required string Name { get; set; }
+        public required string Username { get; set; }
+        public required string Password { get; set; }
+        public string? Email { get; set; }
+        public string? Roles { get; set; }
     }
-
 }
