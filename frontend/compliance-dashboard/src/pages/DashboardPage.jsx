@@ -35,7 +35,6 @@ const DashboardPage = ({ isLoggedIn, onLogout }) => {
   }, []);
 
   useEffect(() => {
-    debugger;
     if (complianceRuleList.length > 0) {
       setActiveNavItem(complianceRuleList[0]);
     }
@@ -94,7 +93,7 @@ const DashboardPage = ({ isLoggedIn, onLogout }) => {
         <main className="flex-1 p-6 bg-gray-50 overflow-auto">
           {/* Section Title */}
           <h2 className="text-3xl font-semibold text-gray-800 mb-6">
-            Overview
+            {activeNavItem.charAt(0).toUpperCase() + activeNavItem.slice(1)}
           </h2>
 
           {/* Compliance Overview Cards */}
