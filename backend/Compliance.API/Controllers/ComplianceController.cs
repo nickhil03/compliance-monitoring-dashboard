@@ -13,7 +13,7 @@ namespace Compliance.API.Controllers
     [Authorize]
     public class ComplianceController(IMediator _mediator) : ControllerBase
     {
-        [HttpGet("compliance")]
+        [HttpGet("get-all")]
         public async Task<IActionResult> GetCompliance()
         {
             var result = await _mediator.Send(new GetAllComplianceResultsQuery());

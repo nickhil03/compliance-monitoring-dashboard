@@ -1,29 +1,45 @@
-import { useState, useEffect } from "react";
-//import { useNavigate } from "react-router-dom";
+import { useState, useEffect, act } from "react";
+import { useNavigate } from "react-router-dom";
 import getComplianceOverviewService from "../services/compliance/getComplianceOverviewService";
 import getrecentActivitiesService from "../services/compliance/getRecentActivitiesService";
 import getComplianceItemsService from "../services/compliance/getComplianceItemsService";
+import userDetailService from "../services/user/userDetailService";
+import getComplianceService from "../services/compliance/getComplianceService";
 
 const DashboardPage = ({ isLoggedIn, onLogout }) => {
-  //const navigate = useNavigate();
+  const navigate = useNavigate();
 
   // Effect to redirect if not logged in
-  // useEffect(() => {
-  //   if (!isLoggedIn) {
-  //     navigate("/login");
-  //   }
-  // }, [isLoggedIn, navigate]);
+  useEffect(() => {
+    if (!isLoggedIn) {
+      navigate("/login");
+    }
+  }, [isLoggedIn, navigate]);
 
-  // State to manage the active navigation item (for demonstration)
-  const [activeNavItem, setActiveNavItem] = useState("overview");
+  const [complianceItems, setComplianceItems] = useState([]);
+  const [complianceRuleList, setComplianceRuleList] = useState([]);
+  const [userDetails, setUserDetails] = useState({});
+  const [complianceOverview, setComplianceOverview] = useState([]);
+  const [recentActivities, setRecentActivities] = useState([]);
+  const [activeNavItem, setActiveNavItem] = useState("");
 
-  const complianceOverview = getComplianceOverviewService();
+  useEffect(() => {
+    const fetchData = async () => {
+      setComplianceRuleList(await getComplianceService());
+      setComplianceOverview(await getComplianceOverviewService());
+      setRecentActivities(await getrecentActivitiesService());
+      setComplianceItems(await getComplianceItemsService());
+      setUserDetails(await userDetailService());
+    };
+    fetchData();
+  }, []);
 
-  const recentActivities = getrecentActivitiesService();
-
-  const complianceItems = getComplianceItemsService();
-
-  const username = "John Doe"; // Placeholder for username
+  useEffect(() => {
+    debugger;
+    if (complianceRuleList.length > 0) {
+      setActiveNavItem(complianceRuleList[0]);
+    }
+  }, [complianceRuleList]);
 
   return (
     // Main container for the entire dashboard, using flexbox for layout
@@ -36,9 +52,11 @@ const DashboardPage = ({ isLoggedIn, onLogout }) => {
         <div className="flex items-center space-x-4">
           {/* User Avatar Placeholder */}
           <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 font-semibold">
-            JD
+            {userDetails.username}
           </div>
-          <span className="text-gray-700 hidden sm:block">{username}</span>
+          <span className="text-gray-700 hidden sm:block">
+            {userDetails.name}
+          </span>
           {/* Logout Button */}
           <button
             onClick={onLogout}
@@ -54,23 +72,21 @@ const DashboardPage = ({ isLoggedIn, onLogout }) => {
         {/* Sidebar Navigation */}
         <nav className="w-64 bg-gray-800 text-white p-6 hidden md:block">
           <ul className="space-y-2">
-            {["overview", "audits", "policies", "risks", "reports"].map(
-              (item) => (
-                <li key={item}>
-                  <button
-                    onClick={() => setActiveNavItem(item)}
-                    className={`block w-full text-left py-2 px-4 rounded-md transition-colors duration-200
+            {complianceRuleList.map((item) => (
+              <li key={item}>
+                <button
+                  onClick={() => setActiveNavItem(item)}
+                  className={`block w-full text-left py-2 px-4 rounded-md transition-colors duration-200
                     ${
                       activeNavItem === item
                         ? "bg-indigo-600 text-white"
                         : "hover:bg-gray-700 text-gray-300"
                     }`}
-                  >
-                    {item.charAt(0).toUpperCase() + item.slice(1)}
-                  </button>
-                </li>
-              )
-            )}
+                >
+                  {item.charAt(0).toUpperCase() + item.slice(1)}
+                </button>
+              </li>
+            ))}
           </ul>
         </nav>
 

@@ -1,6 +1,6 @@
 //import complianceServiceHttp from "./complianceServiceHttp";
 
-const getComplianceOverviewService = () => {
+const getComplianceOverviewService = async () => {
   try {
     //const res = await complianceServiceHttp.get("/Compliance/login");
     //const complianceOverview = res.data.complianceOverview;

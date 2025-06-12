@@ -1,4 +1,4 @@
-const getRecentActivitiesService = () => {
+const getRecentActivitiesService = async () => {
   try {
     //const res = await complianceServiceHttp.get("/Compliance/login");
     //const recentActivities = res.data.recentActivities;
