@@ -11,9 +11,9 @@ namespace Compliance.Auth.Controllers
     public class AuthController(IConfiguration _configuration, AuthenticationService _authService) : ControllerBase
     {
         [HttpPost("login")]
-        public IActionResult Login([FromBody] UserLoginModel request)
+        public async Task<IActionResult> Login([FromBody] UserLoginModel request)
         {
-            var user = _authService.AuthenticateAsync(request.Username, request.Password);
+            var user = await _authService.AuthenticateAsync(request.Username, request.Password);
             if (user == null)
             {
                 return Unauthorized(new { message = "Invalid credentials" });
@@ -21,7 +21,7 @@ namespace Compliance.Auth.Controllers
             else
             {
                 TokenLogic tokenLogic = new(_configuration);
-                var token = tokenLogic.GenerateJwtToken(user.Result);
+                var token = tokenLogic.GenerateJwtToken(user);
                 return Ok(new { token });
             }
         }
