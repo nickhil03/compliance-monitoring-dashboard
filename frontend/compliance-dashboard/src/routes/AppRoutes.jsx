@@ -2,6 +2,7 @@ import { useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "../pages/LoginPage";
 import DashboardPage from "../pages/DashboardPage";
+import Home from "../pages/Home";
 
 const AppRoutes = () => {
   // State to manage authentication status
@@ -9,6 +10,7 @@ const AppRoutes = () => {
 
   // Function to handle successful login from the Login component
   const handleLoginSuccess = (loginStatus) => {
+    debugger;
     setIsLoggedIn(loginStatus);
   };
 
@@ -21,6 +23,7 @@ const AppRoutes = () => {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={<Home />} />
         <Route
           path="/login"
           element={<LoginPage onLoginSuccess={handleLoginSuccess} />}
