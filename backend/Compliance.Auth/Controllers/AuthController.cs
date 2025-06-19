@@ -29,7 +29,7 @@ namespace Compliance.Auth.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] UserRegisterModel request)
         {
-            bool result = await _authService.RegisterUserAsync(request.Username, request.Password);
+            bool result = await _authService.RegisterUserAsync(request);
             if (!result)
             {
                 return BadRequest(new { message = "Username already exists" });

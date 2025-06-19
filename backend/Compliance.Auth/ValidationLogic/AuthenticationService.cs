@@ -15,19 +15,21 @@ namespace Compliance.Auth.ValidationLogic
             return user;
         }
 
-        public async Task<bool> RegisterUserAsync(string username, string password)
+        public async Task<bool> RegisterUserAsync(UserRegisterModel userModel)
         {
-            if (await _userRepo.GetUserByUsernameAsync(username) != null)
+            if (await _userRepo.GetUserByUsernameAsync(userModel.Username) != null)
             {
                 return false; // User already exists  
             }
 
-            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(password);
+            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(userModel.Password);
             var user = new User
             {
                 _id = new MongoDB.Bson.ObjectId(), // Generate a unique ID  
-                Name = username, // Assuming Name can be set to username  
-                Username = username,
+                Name = userModel.Name,
+                Username = userModel.Username,
+                Email = userModel.Email,
+                Roles = userModel.Roles,
                 Password = hashedPassword
             };
 
