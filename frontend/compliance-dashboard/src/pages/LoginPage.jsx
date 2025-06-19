@@ -83,6 +83,17 @@ const LoginPage = ({ onLoginSuccess }) => {
               Sign In
             </button>
           </div>
+          <div>
+            <p className="mt-4 text-center text-gray-600 text-sm">
+              Don't have an account?{" "}
+              <a
+                href="/signup"
+                className="text-indigo-600 hover:text-indigo-800 font-semibold"
+              >
+                Sign Up
+              </a>
+            </p>
+          </div>
         </form>
       </div>
     </div>

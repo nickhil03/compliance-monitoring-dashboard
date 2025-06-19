@@ -12,7 +12,7 @@ const Home = () => (
         to continue.
       </p>
       <p className="mb-6 text-gray-600">
-        <a href="/singup" className="text-indigo-600 underline">
+        <a href="/signup" className="text-indigo-600 underline">
           Sign up
         </a>{" "}
         for new account.
