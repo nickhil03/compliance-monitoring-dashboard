@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import userLoginService from "../services/user/userLoginService";
 
 const LoginPage = ({ onLoginSuccess }) => {
@@ -86,12 +86,12 @@ const LoginPage = ({ onLoginSuccess }) => {
           <div>
             <p className="mt-4 text-center text-gray-600 text-sm">
               Don't have an account?{" "}
-              <a
-                href="/signup"
+              <Link
+                to="/signup"
                 className="text-indigo-600 hover:text-indigo-800 font-semibold"
               >
                 Sign Up
-              </a>
+              </Link>
             </p>
           </div>
         </form>

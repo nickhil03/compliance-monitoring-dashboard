@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import LoginPage from "../pages/LoginPage";
-import DashboardPage from "../pages/DashboardPage";
+import DashboardPage from "../pages/Dashboard/DashboardPage";
 import Home from "../pages/Home";
 import Signup from "../pages/Signup";
 
 const AppRoutes = () => {
+  const navigate = useNavigate();
   // State to manage authentication status
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
 
@@ -18,36 +19,33 @@ const AppRoutes = () => {
   const handleLogout = () => {
     setIsLoggedIn(false);
     localStorage.removeItem("token"); // Clear the stored JWT
+    navigate("/login");
   };
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route
-          path="/login"
-          element={<LoginPage onLoginSuccess={handleLoginSuccess} />}
-        />
-        <Route
-          path="/dashboard"
-          element={
-            isLoggedIn ? (
-              <DashboardPage isLoggedIn={isLoggedIn} onLogout={handleLogout} />
-            ) : (
-              // Redirect to login if not authenticated
-              <Navigate to="/login" replace />
-            )
-          }
-        />
-        <Route
-          path="*"
-          element={
-            <Navigate to={isLoggedIn ? "/dashboard" : "/login"} replace />
-          }
-        />
-        <Route path="/signup" element={<Signup />} />
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route
+        path="/login"
+        element={<LoginPage onLoginSuccess={handleLoginSuccess} />}
+      />
+      <Route
+        path="/dashboard"
+        element={
+          isLoggedIn ? (
+            <DashboardPage isLoggedIn={isLoggedIn} onLogout={handleLogout} />
+          ) : (
+            // Redirect to login if not authenticated
+            <Navigate to="/login" replace />
+          )
+        }
+      />
+      <Route
+        path="*"
+        element={<Navigate to={isLoggedIn ? "/dashboard" : "/login"} replace />}
+      />
+      <Route path="/signup" element={<Signup />} />
+    </Routes>
   );
 };
 

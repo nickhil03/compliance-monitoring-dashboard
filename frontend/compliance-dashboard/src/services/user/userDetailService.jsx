@@ -5,11 +5,12 @@ const userDetailService = async () => {
     const res = await complianceServiceHttp.get("/user/details");
 
     if (!res.data || Object.keys(res.data).length === 0) {
+      localStorage.removeItem("token");
       throw new Error("User details not found");
     }
     return res.data;
   } catch (err) {
-    console.error("Invalid credentials");
+    console.error("Error fetching user details:", err);
   }
 };
 

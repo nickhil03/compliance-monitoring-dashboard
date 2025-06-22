@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const Home = () => (
   <div className="flex items-center justify-center min-h-screen bg-gray-100">
     <div className="bg-white p-8 rounded shadow text-center">
@@ -6,15 +8,15 @@ const Home = () => (
       </h1>
       <p className="mb-6 text-gray-600">
         Please{" "}
-        <a href="/login" className="text-indigo-600 underline">
+        <Link to="/login" className="text-indigo-600 underline">
           login
-        </a>{" "}
+        </Link>{" "}
         to continue.
       </p>
       <p className="mb-6 text-gray-600">
-        <a href="/signup" className="text-indigo-600 underline">
+        <Link to="/signup" className="text-indigo-600 underline">
           Sign up
-        </a>{" "}
+        </Link>{" "}
         for new account.
       </p>
     </div>

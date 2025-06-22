@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import userRegisterService from "../services/user/userRegisterService";
 
 const Signup = () => {
@@ -115,9 +115,9 @@ const Signup = () => {
         </button>
         <div className="mt-4 text-center">
           Already have an account?{" "}
-          <a href="/login" className="text-indigo-600 underline">
+          <Link to="/login" className="text-indigo-600 underline">
             Login
-          </a>
+          </Link>
         </div>
       </form>
     </div>

@@ -11,7 +11,7 @@ const getComplianceService = async () => {
       .map((x) => x.ruleName);
     return complianceList;
   } catch (err) {
-    alert("Invalid credentials");
+    alert("No compliance data found");
   }
 };
 

@@ -1,10 +1,10 @@
-import { useState, useEffect, act } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import getComplianceOverviewService from "../services/compliance/getComplianceOverviewService";
-import getrecentActivitiesService from "../services/compliance/getRecentActivitiesService";
-import getComplianceItemsService from "../services/compliance/getComplianceItemsService";
-import userDetailService from "../services/user/userDetailService";
-import getComplianceService from "../services/compliance/getComplianceService";
+import getComplianceOverviewService from "../../services/compliance/getComplianceOverviewService";
+import getrecentActivitiesService from "../../services/compliance/getRecentActivitiesService";
+import getComplianceItemsService from "../../services/compliance/getComplianceItemsService";
+import getComplianceService from "../../services/compliance/getComplianceService";
+import HeaderDashboard from "./HeaderDashboard";
 
 const DashboardPage = ({ isLoggedIn, onLogout }) => {
   const navigate = useNavigate();
@@ -12,13 +12,13 @@ const DashboardPage = ({ isLoggedIn, onLogout }) => {
   // Effect to redirect if not logged in
   useEffect(() => {
     if (!isLoggedIn) {
+      localStorage.removeItem("token");
       navigate("/login");
     }
   }, [isLoggedIn, navigate]);
 
   const [complianceItems, setComplianceItems] = useState([]);
   const [complianceRuleList, setComplianceRuleList] = useState([]);
-  const [userDetails, setUserDetails] = useState({});
   const [complianceOverview, setComplianceOverview] = useState([]);
   const [recentActivities, setRecentActivities] = useState([]);
   const [activeNavItem, setActiveNavItem] = useState("");
@@ -29,7 +29,6 @@ const DashboardPage = ({ isLoggedIn, onLogout }) => {
       setComplianceOverview(await getComplianceOverviewService());
       setRecentActivities(await getrecentActivitiesService());
       setComplianceItems(await getComplianceItemsService());
-      setUserDetails(await userDetailService());
     };
     fetchData();
   }, []);
@@ -43,28 +42,7 @@ const DashboardPage = ({ isLoggedIn, onLogout }) => {
   return (
     // Main container for the entire dashboard, using flexbox for layout
     <div className="min-h-screen bg-gray-100 font-sans antialiased flex flex-col">
-      {/* Header Section */}
-      <header className="bg-white shadow-sm p-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-800">
-          Compliance Dashboard
-        </h1>
-        <div className="flex items-center space-x-4">
-          {/* User Avatar Placeholder */}
-          <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 font-semibold">
-            {userDetails.username}
-          </div>
-          <span className="text-gray-700 hidden sm:block">
-            {userDetails.name}
-          </span>
-          {/* Logout Button */}
-          <button
-            onClick={onLogout}
-            className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition duration-150 ease-in-out"
-          >
-            Logout
-          </button>
-        </div>
-      </header>
+      <HeaderDashboard isLoggedIn={isLoggedIn} onLogout={onLogout} />
 
       {/* Main Content Area - uses flex to arrange sidebar and main content */}
       <div className="flex flex-1">
