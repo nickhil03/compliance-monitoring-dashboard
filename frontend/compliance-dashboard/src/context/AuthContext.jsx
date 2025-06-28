@@ -3,7 +3,9 @@ import { createContext, useState, useContext } from "react";
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
+  const [isLoggedIn, setIsLoggedIn] = useState(
+    !!localStorage.getItem("token") && localStorage.getItem("token") !== ""
+  );
 
   // Function to handle successful login from the Login component
   const handleLoginSuccess = (loginStatus) => {
@@ -12,6 +14,7 @@ export const AuthProvider = ({ children }) => {
 
   // Function to handle logout
   const handleLogout = () => {
+    debugger;
     setIsLoggedIn(false);
     localStorage.removeItem("token");
   };
