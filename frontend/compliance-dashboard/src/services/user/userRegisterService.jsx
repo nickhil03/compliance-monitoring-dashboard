@@ -6,8 +6,7 @@ const userRegisterService = async (user) => {
     const message = res.data.message;
     return message;
   } catch (err) {
-    console.error("Registration failed:", err);
-    throw new Error("Registration failed. Please try again.");
+    console.log("Registration failed. Please try again.");
   }
 };
 

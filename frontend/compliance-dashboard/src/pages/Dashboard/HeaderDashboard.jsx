@@ -1,16 +1,9 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom"; // Importing the user detail service
-import userDetailService from "../../services/user/userDetailService"; // Adjust the import path as necessary
+import userDetailService from "../../services/user/userDetailService";
+import { useAuth } from "../../context/AuthContext";
 
-const HeaderDashboard = ({ isLoggedIn, onLogout }) => {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!isLoggedIn) {
-      localStorage.removeItem("token");
-      navigate("/login");
-    }
-  }, [isLoggedIn, navigate]);
+const HeaderDashboard = () => {
+  const { onLogout } = useAuth();
 
   const [userDetails, setUserDetails] = useState({ username: "", name: "" });
 

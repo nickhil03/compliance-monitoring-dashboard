@@ -43,7 +43,7 @@ const getComplianceItemsService = async () => {
     ];
     return complianceItems;
   } catch (err) {
-    alert("Invalid credentials");
+    console.error("Invalid credentials");
   }
 };
 

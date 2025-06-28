@@ -2,15 +2,16 @@ import complianceServiceHttp from "../compliance/complianceServiceHttp";
 
 const userDetailService = async () => {
   try {
+    debugger;
     const res = await complianceServiceHttp.get("/user/details");
 
     if (!res.data || Object.keys(res.data).length === 0) {
       localStorage.removeItem("token");
-      throw new Error("User details not found");
+      console.log("User details not found");
     }
     return res.data;
   } catch (err) {
-    console.error("Error fetching user details:", err);
+    console.log("Error fetching user details:", err);
   }
 };
 

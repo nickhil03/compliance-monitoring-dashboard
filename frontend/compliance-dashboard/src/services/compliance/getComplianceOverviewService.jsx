@@ -32,7 +32,7 @@ const getComplianceOverviewService = async () => {
     ];
     return complianceOverview;
   } catch (err) {
-    alert("Invalid credentials");
+    console.error("Please contact support, error:", err);
   }
 };
 

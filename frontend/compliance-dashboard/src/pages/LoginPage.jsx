@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import userLoginService from "../services/user/userLoginService";
+import { useAuth } from "../context/AuthContext";
 
-const LoginPage = ({ onLoginSuccess }) => {
+const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate(); // Hook for navigation
+  const { handleLoginSuccess } = useAuth(); // Get the login success handler from AuthContext
 
   const handleLogin = async (e) => {
     try {
@@ -17,11 +19,11 @@ const LoginPage = ({ onLoginSuccess }) => {
 
       if (token) {
         localStorage.setItem("token", token);
-        onLoginSuccess(true);
+        handleLoginSuccess(true);
         navigate("/dashboard");
       } else {
         setError("Invalid credentials. Please try again.");
-        onLoginSuccess(false);
+        handleLoginSuccess(false);
       }
     } catch (error) {
       console.error("An error occurred:", error);

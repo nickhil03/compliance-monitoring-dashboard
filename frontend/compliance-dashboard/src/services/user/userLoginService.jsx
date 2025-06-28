@@ -9,7 +9,7 @@ const userLoginService = async (username, password) => {
     const token = res.data.token;
     return token;
   } catch (err) {
-    console.error("Invalid credentials");
+    console.log("Invalid credentials");
   }
 };
 

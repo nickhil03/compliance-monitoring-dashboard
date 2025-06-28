@@ -8,6 +8,7 @@ const complianceServiceHttp = axios.create({
 });
 
 complianceServiceHttp.interceptors.request.use((config) => {
+  debugger;
   const token = localStorage.getItem("token");
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;

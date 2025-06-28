@@ -30,7 +30,7 @@ const getRecentActivitiesService = async () => {
     ];
     return recentActivities;
   } catch (err) {
-    alert("Invalid credentials");
+    console.error("Invalid credentials");
   }
 };
 
