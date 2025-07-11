@@ -11,18 +11,25 @@ namespace Compliance.API.Controllers
         [HttpGet("getByRuleId")]
         public async Task<IActionResult> GetByRuleId(string ruleId)
         {
-            if (string.IsNullOrWhiteSpace(ruleId))
+            try
             {
-                return BadRequest("Rule name is required.");
-            }
+                if (string.IsNullOrWhiteSpace(ruleId))
+                {
+                    return BadRequest("Rule name is required.");
+                }
 
-            var complianceItems = await mediator.Send(new GetAllComplianceItemsQuery(ruleId));
-            if (complianceItems == null || complianceItems.Count == 0)
+                var complianceItems = await mediator.Send(new GetAllComplianceItemsQuery(ruleId));
+                if (complianceItems == null || complianceItems.Count == 0)
+                {
+                    return NotFound("No compliance items found for the specified rule.");
+                }
+
+                return Ok(complianceItems);
+            }
+            catch (Exception ex)
             {
-                return NotFound("No compliance items found for the specified rule.");
-            }
-
-            return Ok(complianceItems);
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Internal server error: {ex.Message}");
+            }            
         }
     }
 }
