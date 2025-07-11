@@ -9,10 +9,6 @@
       {
         "Path": "Compliance.Auth\\Compliance.Auth.csproj",
         "Action": "Start"
-      },
-      {
-        "Path": "Compliance.Worker\\Compliance.Worker.csproj",
-        "Action": "Start"
       }
     ]
   }

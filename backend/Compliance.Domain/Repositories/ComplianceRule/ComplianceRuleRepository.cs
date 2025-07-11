@@ -3,9 +3,9 @@ using MongoDB.Driver;
 
 namespace Compliance.Domain.Repositories.ComplianceRule
 {
-    public class ComplianceRuleRepository(IMongoDatabase database, string collectionName) : IComplianceRuleRepository
+    public class ComplianceRuleRepository(IMongoDatabase database) : IComplianceRuleRepository
     {
-        private readonly IMongoCollection<ComplianceResult> _collection = database.GetCollection<ComplianceResult>(collectionName);
+        private readonly IMongoCollection<ComplianceResult> _collection = database.GetCollection<ComplianceResult>("ComplianceResults");
 
         public async Task<List<ComplianceResult>> GetAllAsync() =>
             await _collection.Find(_ => true).ToListAsync();

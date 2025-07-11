@@ -1,6 +1,7 @@
 using Compliance.API.Middleware;
-using Compliance.Application.Queries.Query;
+using Compliance.Application.Queries.Query.ComplianceResultQuery;
 using Compliance.Application.Validators;
+using Compliance.Domain.Repositories.Activity;
 using Compliance.Domain.Repositories.ComplianceRule;
 using Compliance.Domain.Settings;
 using Compliance.Infrastructure.Messaging.Consumer;
@@ -59,21 +60,30 @@ builder.Services.AddSwaggerGen(options =>
 
 // MongoDB Config Binding
 builder.Services.Configure<MongoDbSettings>(
-    builder.Configuration.GetSection("MongoDB"));
+    builder.Configuration.GetSection("MongoDB")
+);
 
 builder.Services.AddSingleton<IMongoClient>(sp =>
+    new MongoClient(sp.GetRequiredService<IOptions<MongoDbSettings>>().Value.ConnectionString)
+);
+
+builder.Services.AddScoped(sp =>
 {
-    var settings = sp.GetRequiredService<IOptions<MongoDbSettings>>().Value;
-    return new MongoClient(settings.ConnectionString);
+    var mongoClient = sp.GetRequiredService<IMongoClient>();
+    return mongoClient.GetDatabase(sp.GetRequiredService<IOptions<MongoDbSettings>>().Value.Database);
 });
 
 builder.Services.AddScoped<IComplianceRuleRepository>(sp =>
-{
-    var settings = sp.GetRequiredService<IOptions<MongoDbSettings>>().Value;
-    var client = sp.GetRequiredService<IMongoClient>();
-    var database = client.GetDatabase(settings.Database);
-    return new ComplianceRuleRepository(database, settings.CollectionName);
-});
+    new ComplianceRuleRepository(
+        sp.GetRequiredService<IMongoDatabase>()
+    )
+);
+
+builder.Services.AddScoped<IRecentActivitiesRepository>(sp =>
+    new RecentActivitiesRepository(
+        sp.GetRequiredService<IMongoDatabase>()
+    )
+);
 
 builder.Services.AddMediatR(config =>
 {

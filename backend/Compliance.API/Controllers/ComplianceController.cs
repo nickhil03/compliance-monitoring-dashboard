@@ -1,7 +1,7 @@
 ﻿using Compliance.Application.Commands.Create.Command;
 using Compliance.Application.Commands.Delete.Command;
 using Compliance.Application.Commands.Update.Command;
-using Compliance.Application.Queries.Query;
+using Compliance.Application.Queries.Query.ComplianceResultQuery;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

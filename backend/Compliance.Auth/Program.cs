@@ -3,8 +3,17 @@ using Compliance.Domain.Repositories.Users;
 using Compliance.Domain.Settings;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Add Serilog configuration
+//builder.Host.UseSerilog((context, services, configuration) =>
+//    configuration
+//        .ReadFrom.Configuration(context.Configuration)
+//        .ReadFrom.Services(services)
+//        .Enrich.FromLogContext()
+//);
 
 // Add services to the container.
 builder.Services.AddControllers();

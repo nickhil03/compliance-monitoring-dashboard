@@ -2,7 +2,6 @@ import complianceServiceHttp from "../compliance/complianceServiceHttp";
 
 const userDetailService = async () => {
   try {
-    debugger;
     const res = await complianceServiceHttp.get("/user/details");
 
     if (!res.data || Object.keys(res.data).length === 0) {

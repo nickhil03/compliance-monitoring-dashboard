@@ -14,7 +14,6 @@ export const AuthProvider = ({ children }) => {
 
   // Function to handle logout
   const handleLogout = () => {
-    debugger;
     setIsLoggedIn(false);
     localStorage.removeItem("token");
   };
