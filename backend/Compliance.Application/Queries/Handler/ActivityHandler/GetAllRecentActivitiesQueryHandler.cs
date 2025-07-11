@@ -1,4 +1,4 @@
-﻿using Compliance.Application.Queries.Query.ActivityHandler;
+﻿using Compliance.Application.Queries.Query.ActivityQuery;
 using Compliance.Domain.Entities;
 using Compliance.Domain.Repositories.Activity;
 using MediatR;

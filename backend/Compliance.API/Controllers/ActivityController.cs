@@ -1,6 +1,5 @@
-﻿using Compliance.Application.Queries.Query.ActivityHandler;
+﻿using Compliance.Application.Queries.Query.ActivityQuery;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Compliance.API.Controllers
