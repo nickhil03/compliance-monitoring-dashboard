@@ -2,13 +2,16 @@ using Compliance.API.Middleware;
 using Compliance.Application.Queries.Query.ComplianceResultQuery;
 using Compliance.Application.Validators;
 using Compliance.Domain.Repositories.Activity;
+using Compliance.Domain.Repositories.ComplianceItemsRepos;
 using Compliance.Domain.Repositories.ComplianceRule;
+using Compliance.Domain.Repositories.ComplianceStatusRepos;
 using Compliance.Domain.Settings;
 using Compliance.Infrastructure.Messaging.Consumer;
 using Compliance.Infrastructure.Messaging.Publisher;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
 using MongoDB.Driver;
 using RabbitMQ.Client;
 
@@ -17,39 +20,43 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddHttpClient();
+
+// Configure CORS to allow all origins, methods, and headers
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAllOrigins",
         builder =>
-    {
+        {
             builder.AllowAnyOrigin()
               .AllowAnyMethod()
               .AllowAnyHeader();
     });
 });
+
+// Configure Swagger and OpenAPI
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new() { Title = "Compliance API", Version = "v1" });
 
     // Add JWT Authentication to Swagger
-    options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",
-        Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
+        Type = SecuritySchemeType.Http,
         Scheme = "Bearer",
         BearerFormat = "JWT",
-        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+        In = ParameterLocation.Header,
         Description = "Enter 'Bearer' [space] and then your token.\n\nExample: **Bearer eyJhbGci...**"
     });
 
-    options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
-            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+            new OpenApiSecurityScheme
             {
-                Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                Reference = new OpenApiReference
                 {
-                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                    Type = ReferenceType.SecurityScheme,
                     Id = "Bearer"
                 }
             },
@@ -68,10 +75,9 @@ builder.Services.AddSingleton<IMongoClient>(sp =>
 );
 
 builder.Services.AddScoped(sp =>
-{
-    var mongoClient = sp.GetRequiredService<IMongoClient>();
-    return mongoClient.GetDatabase(sp.GetRequiredService<IOptions<MongoDbSettings>>().Value.Database);
-});
+    sp.GetRequiredService<IMongoClient>().GetDatabase(
+        sp.GetRequiredService<IOptions<MongoDbSettings>>().Value.Database)
+);
 
 builder.Services.AddScoped<IComplianceRuleRepository>(sp =>
     new ComplianceRuleRepository(
@@ -81,6 +87,18 @@ builder.Services.AddScoped<IComplianceRuleRepository>(sp =>
 
 builder.Services.AddScoped<IRecentActivitiesRepository>(sp =>
     new RecentActivitiesRepository(
+        sp.GetRequiredService<IMongoDatabase>()
+    )
+);
+
+builder.Services.AddScoped<IComplianceItemsRepository>(sp =>
+    new ComplianceItemsRepository(
+        sp.GetRequiredService<IMongoDatabase>()
+    )
+);
+
+builder.Services.AddScoped<IComplianceStatusRepository>(sp =>
+    new ComplianceStatusRepository(
         sp.GetRequiredService<IMongoDatabase>()
     )
 );
