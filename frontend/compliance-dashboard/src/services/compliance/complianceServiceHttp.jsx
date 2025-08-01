@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const complianceServiceHttp = axios.create({
-  baseURL: "https://localhost:7035/api",
+  baseURL: import.meta.env.VITE_COMPLIANCE_API_URL,
   headers: {
     "Content-Type": "application/json",
   },

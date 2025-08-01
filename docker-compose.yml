@@ -1,0 +1,59 @@
+version: "3.8"
+
+services:
+  mongo:
+    image: mongo
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  auth:
+    build:
+      context: ./backend
+      dockerfile: Compliance.Auth/Dockerfile
+    image: compliance-auth
+    container_name: compliance-auth
+    ports:
+      - "5000:8080"
+    depends_on:
+      - mongo
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__MongoDb=mongodb://mongo:27017
+      - MongoDb__DatabaseName=Authentication
+
+  api:
+    build:
+      context: ./backend
+      dockerfile: Compliance.API/Dockerfile
+    image: compliance-api
+    container_name: compliance-api
+    ports:
+      - "5001:8080"
+    depends_on:
+      - auth
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__MongoDb=mongodb://mongo:27017
+      - MongoDb__DatabaseName=ComplianceDB
+
+  ui:
+    build:
+      context: ./frontend/compliance-dashboard
+      dockerfile: Dockerfile
+      args:
+        VITE_AUTH_API_URL: ${VITE_AUTH_API_URL}
+        VITE_COMPLIANCE_API_URL: ${VITE_COMPLIANCE_API_URL}
+    image: compliance-ui
+    container_name: compliance-ui
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+      - auth
+
+volumes:
+  mongo_data:
+    

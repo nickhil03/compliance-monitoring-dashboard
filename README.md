@@ -19,15 +19,15 @@ A full-stack application for real-time compliance tracking, rule-based evaluatio
 
 ## Tech Stack
 
-| Layer       | Technology                         |
-|-------------|-------------------------------------|
-| Frontend    | React.js (with Axios, Chart.js)     |
-| Backend     | .NET Core Web API + MediatR         |
-| DB          | MongoDB                             |
-| Messaging   | RabbitMQ                            |
-| Worker      | .NET Hosted Service (Queue Consumer)|
-| Auth        | JWT Bearer Authentication           |
-| DevOps      | Azure DevOps + Docker + Nginx       |
+| Layer     | Technology                           |
+| --------- | ------------------------------------ |
+| Frontend  | React.js (with Axios, Chart.js)      |
+| Backend   | .NET Core Web API + MediatR          |
+| DB        | MongoDB                              |
+| Messaging | RabbitMQ                             |
+| Worker    | .NET Hosted Service (Queue Consumer) |
+| Auth      | JWT Bearer Authentication            |
+| DevOps    | Azure DevOps + Docker + Nginx        |
 
 ---
 
@@ -41,6 +41,21 @@ A full-stack application for real-time compliance tracking, rule-based evaluatio
 
 ### 1. Clone the Repository
 
-```bash
+````bash
 git clone https://github.com/yourusername/compliance-monitoring-dashboard.git
 cd compliance-monitoring-dashboard
+
+### 2. Install Dependencies
+
+```bash
+npm install
+
+### 3. Run the Application
+
+npm run dev
+
+### 4. Command to Run Docker Compose
+
+```bash
+docker-compose -f docker-compose.yml --env-file .env.docker up --build --force-recreate -d
+````

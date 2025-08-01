@@ -2,7 +2,7 @@ import complianceServiceHttp from "../compliance/complianceServiceHttp";
 
 const userDetailService = async () => {
   try {
-    const res = await complianceServiceHttp.get("/user/details");
+    const res = await complianceServiceHttp.get("user/details");
 
     if (!res.data || Object.keys(res.data).length === 0) {
       localStorage.removeItem("token");

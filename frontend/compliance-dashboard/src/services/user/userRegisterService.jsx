@@ -2,7 +2,7 @@ import userServiceHttp from "./userServiceHttp";
 
 const userRegisterService = async (user) => {
   try {
-    const res = await userServiceHttp.post("/auth/register", user);
+    const res = await userServiceHttp.post("register", user);
     const message = res.data.message;
     return message;
   } catch (err) {

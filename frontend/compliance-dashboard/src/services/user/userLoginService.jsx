@@ -2,7 +2,7 @@ import userServiceHttp from "./userServiceHttp";
 
 const userLoginService = async (username, password) => {
   try {
-    const res = await userServiceHttp.post("/auth/login", {
+    const res = await userServiceHttp.post("login", {
       username,
       password,
     });
