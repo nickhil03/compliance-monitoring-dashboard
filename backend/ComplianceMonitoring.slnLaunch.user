@@ -4,11 +4,13 @@
     "Projects": [
       {
         "Path": "Compliance.API\\Compliance.API.csproj",
-        "Action": "Start"
+        "Action": "Start",
+        "DebugTarget": "https"
       },
       {
         "Path": "Compliance.Auth\\Compliance.Auth.csproj",
-        "Action": "Start"
+        "Action": "Start",
+        "DebugTarget": "https"
       }
     ]
   }

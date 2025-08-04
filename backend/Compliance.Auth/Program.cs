@@ -34,18 +34,14 @@ builder.Services.Configure<MongoDbSettings>(
     builder.Configuration.GetSection("MongoDB"));
 
 builder.Services.AddSingleton<IMongoClient>(sp =>
-{
-    var settings = sp.GetRequiredService<IOptions<MongoDbSettings>>().Value;
-    return new MongoClient(settings.ConnectionString);
-});
+    new MongoClient(sp.GetRequiredService<IOptions<MongoDbSettings>>().Value.ConnectionString)
+);
 
 builder.Services.AddScoped<IUserRepository>(sp =>
-{
-    var settings = sp.GetRequiredService<IOptions<MongoDbSettings>>().Value;
-    var client = sp.GetRequiredService<IMongoClient>();
-    var database = client.GetDatabase(settings.Database);
-    return new UserRepository(database, settings.CollectionName);
-});
+    new UserRepository(sp.GetRequiredService<IMongoClient>().GetDatabase(
+        sp.GetRequiredService<IOptions<MongoDbSettings>>().Value.Database
+        ))
+);
 
 builder.Services.AddSwaggerGen();
 
