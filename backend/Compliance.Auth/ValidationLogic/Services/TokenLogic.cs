@@ -1,10 +1,12 @@
-﻿using Compliance.Domain.Model;
+﻿using Compliance.Auth.ValidationLogic.Contracts;
+using Compliance.Domain.Model;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
-namespace Compliance.Auth.ValidationLogic
+namespace Compliance.Auth.ValidationLogic.Services
 {
     public class TokenLogic(IConfiguration _configuration) : ITokenLogic
     {
@@ -21,7 +23,7 @@ namespace Compliance.Auth.ValidationLogic
             return jwtToken.Claims;
         }
 
-        public string GenerateJwtToken(User user)
+        public string GenerateAccessToken(User user)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
@@ -41,7 +43,7 @@ namespace Compliance.Auth.ValidationLogic
                 issuer: _configuration["Jwt:Issuer"],
                 audience: _configuration["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(expiryMinutes),
+                expires: DateTime.UtcNow.AddMinutes(expiryMinutes),
                 signingCredentials: credentials);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
@@ -81,6 +83,15 @@ namespace Compliance.Auth.ValidationLogic
             {
                 return null; // Token validation failed
             }
+        }
+
+        public string GenerateRefreshToken(string username, string? deviceInfo = null, string? ipAddress = null)
+        {
+            var random = new byte[64];
+            using var rng = RandomNumberGenerator.Create();
+            rng.GetBytes(random);
+            var refreshToken = Convert.ToBase64String(random);
+            return refreshToken;
         }
     }
 }

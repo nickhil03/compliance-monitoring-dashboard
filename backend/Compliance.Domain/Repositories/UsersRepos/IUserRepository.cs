@@ -1,6 +1,6 @@
 ﻿using Compliance.Domain.Model;
 
-namespace Compliance.Domain.Repositories.Users;
+namespace Compliance.Domain.Repositories.UsersRepos;
 public interface IUserRepository
 {
     Task<User?> GetUserByCredentialsAsync(string username, string password);

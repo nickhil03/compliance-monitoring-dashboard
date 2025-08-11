@@ -1,5 +1,7 @@
-using Compliance.Auth.ValidationLogic;
-using Compliance.Domain.Repositories.Users;
+using Compliance.Auth.ValidationLogic.Contracts;
+using Compliance.Auth.ValidationLogic.Services;
+using Compliance.Domain.Repositories.RefreshTokenRepos;
+using Compliance.Domain.Repositories.UsersRepos;
 using Compliance.Domain.Settings;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
@@ -28,7 +30,7 @@ builder.Services.AddCors(options =>
               .AllowAnyHeader();
         });
 });
-builder.Services.AddScoped<AuthenticationService>();
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 
 builder.Services.Configure<MongoDbSettings>(
     builder.Configuration.GetSection("MongoDB"));
@@ -39,6 +41,12 @@ builder.Services.AddSingleton<IMongoClient>(sp =>
 
 builder.Services.AddScoped<IUserRepository>(sp =>
     new UserRepository(sp.GetRequiredService<IMongoClient>().GetDatabase(
+        sp.GetRequiredService<IOptions<MongoDbSettings>>().Value.Database
+        ))
+);
+
+builder.Services.AddScoped<IRefreshTokenRepository>(sp =>
+    new RefreshTokenRepository(sp.GetRequiredService<IMongoClient>().GetDatabase(
         sp.GetRequiredService<IOptions<MongoDbSettings>>().Value.Database
         ))
 );

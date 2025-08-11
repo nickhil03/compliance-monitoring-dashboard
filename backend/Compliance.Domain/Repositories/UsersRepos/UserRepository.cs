@@ -1,12 +1,12 @@
 ﻿using Compliance.Domain.Model;
 using MongoDB.Driver;
 
-namespace Compliance.Domain.Repositories.Users
+namespace Compliance.Domain.Repositories.UsersRepos
 {
-    public class UserRepository(IMongoDatabase database, string collectionName) : IUserRepository
+    public class UserRepository(IMongoDatabase database) : IUserRepository
     {
-        private readonly IMongoCollection<User> _users = database.GetCollection<User>(collectionName);
-
+        private readonly IMongoCollection<User> _users = database.GetCollection<User>(nameof(User));
+        
         public async Task<User?> GetUserByUsernameAsync(string username)
         {
             return await _users.Find(u => u.Username == username).FirstOrDefaultAsync();
