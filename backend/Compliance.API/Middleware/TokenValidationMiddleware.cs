@@ -36,7 +36,7 @@ namespace Compliance.API.Middleware
 
                     context.Response.StatusCode = 401; // Unauthorized
                     await context.Response.WriteAsync("Unauthorized");
-                    return;
+                    return;// Short-Circuited to return 401
                 }
                 else
                 {

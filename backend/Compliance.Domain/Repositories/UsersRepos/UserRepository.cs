@@ -17,9 +17,14 @@ namespace Compliance.Domain.Repositories.UsersRepos
             await _users.InsertOneAsync(user);
         }
 
-        public async Task<User?> GetUserByCredentialsAsync(string username, string password)
+        public async Task<bool> ValidateUserCredentialsAsync(string username, string password)
         {
-            return await _users.Find(u => u.Username == username && u.Password == password).FirstOrDefaultAsync();
+            var user = await GetUserByUsernameAsync(username);
+            if (user == null)
+            {
+                return false;
+            }
+            return BCrypt.Net.BCrypt.Verify(password, user.Password);
         }
     }
 }

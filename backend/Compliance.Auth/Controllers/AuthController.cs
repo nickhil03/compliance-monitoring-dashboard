@@ -1,5 +1,4 @@
 ﻿using Compliance.Auth.ValidationLogic.Contracts;
-using Compliance.Auth.ValidationLogic.Services;
 using Compliance.Domain.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,87 +8,148 @@ namespace Compliance.Auth.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [AllowAnonymous]
-    public class AuthController(IConfiguration _configuration, IAuthenticationService _authService) : ControllerBase
+    public class AuthController(IAuthenticationService _authService, ITokenLogic _tokenLogic) : ControllerBase
     {
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] UserLoginModel request)
         {
-            var user = await _authService.AuthenticateUserAsync(request.Username, request.Password);
-            if (user == null)
+            try
             {
-                return Unauthorized(new { message = "Invalid credentials" });
-            }
-            else
-            {
-                TokenLogic tokenLogic = new(_configuration);
-                var accessToken = tokenLogic.GenerateAccessToken(user);
-                var refreshToken = tokenLogic.GenerateRefreshToken(user.Username);
-
-                var refreshTokenExpiresAt = DateTime.UtcNow.AddDays(int.TryParse(_configuration["RefreshToken:ExpiryDays"], out var refreshExpiry) ? refreshExpiry : 7);
-
-                var refreshTokenEntity = new RefreshToken
+                if (await _authService.AuthenticateUserAsync(request.Username, request.Password))
                 {
-                    Token = refreshToken,
-                    ExpiresAt = refreshTokenExpiresAt,
-                    UserName = user.Username,
-                    UserAgent = Request.Headers.UserAgent.ToString(),
-                    IpAddress = HttpContext.Connection.RemoteIpAddress?.ToString()
-                };
+                    return Unauthorized(new { message = "Invalid credentials" });
+                }
 
-                await _authService.SaveRefreshTokenAsync(refreshTokenEntity);
-
-                var response = new TokenModel
-                {
-                    AccessToken = accessToken,
-                    RefreshToken = refreshToken,
-                    AccessTokenExpires = DateTime.UtcNow.AddMinutes(int.TryParse(_configuration["Jwt:ExpiryMinutes"], out var expiry) ? expiry : 30),
-                    RefreshTokenExpires = refreshTokenExpiresAt
-                };
+                var userAgent = Request.Headers.UserAgent.ToString();
+                var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString();
+                var response = await _tokenLogic.GenerateTokens(request.Username, userAgent, ipAddress, false);
 
                 // Setting the refresh token in a secure cookie
-                SetRefreshTokenCookie(refreshToken, refreshTokenExpiresAt);
+                SetRefreshTokenCookie(response.RefreshToken, response.RefreshTokenExpires);
 
                 return Ok(response);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, new { message = "An error occurred during login" });
             }
         }
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] UserRegisterModel request)
         {
-            bool result = await _authService.RegisterUserAsync(request);
-            if (!result)
+            try
             {
-                return BadRequest(new { message = "Username already exists" });
-            }
+                bool result = await _authService.RegisterUserAsync(request);
+                if (!result)
+                {
+                    return BadRequest(new { message = "Username already exists" });
+                }
 
-            return Ok(new { message = "User registered successfully" });
+                return Ok(new { message = "User registered successfully" });
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, new { message = "An error occurred during registration" });
+            }            
         }
 
         [HttpPost("validate")]
-        public IActionResult ValidateToken([FromBody] TokenModel request)
+        public IActionResult ValidateToken([FromBody] string accessToken)
         {
-            if (string.IsNullOrEmpty(request.AccessToken))
+            if (string.IsNullOrEmpty(accessToken) || string.IsNullOrEmpty(Request.Cookies["refreshToken"]))
             {
                 return BadRequest(new { message = "Token is required" });
             }
 
             try
             {
-                TokenLogic tokenLogic = new(_configuration);
-                var principal = tokenLogic.ValidateJwtToken(request.AccessToken);
-                if (principal != null)
-                {
-                    var claims = principal.Claims.Select(c => new { c.Type, c.Value });
-                    return Ok(new { isValid = true, claims });
-                }
-                else
+                var principal = _tokenLogic.ValidateJwtToken(accessToken);
+                if (principal == null)
                 {
                     return Unauthorized(new { isValid = false, message = "Invalid token" });
                 }
+
+                var claims = principal.Claims.Select(c => new { c.Type, c.Value });
+                return Ok(new { isValid = true, claims });
             }
             catch (Exception ex)
             {
                 return BadRequest(new { isValid = false, message = $"Token validation error: {ex.Message}" });
+            }
+        }
+
+        [HttpPost("refresh")]
+        public async Task<IActionResult> RefreshToken()
+        {
+            var refreshToken = Request.Cookies["refreshToken"];
+            if (string.IsNullOrEmpty(refreshToken))
+            {
+                return BadRequest(new { message = "Refresh token are required" });
+            }
+            try
+            {
+                var userName = await _tokenLogic.GetUserNameFromRefreshTokenAsync(refreshToken);
+                if (userName == null)
+                {
+                    return Unauthorized(new { message = "Invalid refresh token" });
+                }
+
+                var userAgent = Request.Headers.UserAgent.ToString();
+                var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString();
+                var response = await _tokenLogic.GenerateTokens(userName, userAgent, ipAddress, true);
+                if (response == null)
+                {
+                    return Unauthorized(new { message = "Could not generate new tokens" });
+                }
+
+                await _tokenLogic.RevokeRefreshTokenAsync(refreshToken, response.RefreshToken);
+
+                // Update the refresh token cookie
+                SetRefreshTokenCookie(response.RefreshToken, response.RefreshTokenExpires);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = $"Error refreshing token: {ex.Message}" });
+            }
+        }
+
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            try
+            {
+                var refreshToken = Request.Cookies["refreshToken"];
+                if (!string.IsNullOrEmpty(refreshToken))
+                {
+                    await _tokenLogic.RevokeRefreshTokenAsync(refreshToken);
+                }
+                
+                // Remove the refresh token cookie
+                Response.Cookies.Delete("refreshToken");
+
+                return Ok(new { message = "Logged out successfully" });
+            }
+            catch (Exception)
+            {
+                return BadRequest(new { message = "Error during logout" });
+            }
+        }
+
+        [HttpPost("revoke-all")]
+        public async Task<IActionResult> RevokeAllTokens()
+        {
+            try
+            {
+                var userId = User.FindFirst("_id")?.Value ?? "0";
+                await _tokenLogic.RevokeAllUserTokensAsync(userId);
+
+                return Ok(new { message = "All tokens revoked successfully" });
+            }
+            catch (Exception)
+            {
+                return BadRequest(new { message = "Error revoking tokens" });
             }
         }
 

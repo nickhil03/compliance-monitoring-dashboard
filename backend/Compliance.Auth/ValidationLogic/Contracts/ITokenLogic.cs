@@ -5,9 +5,10 @@ namespace Compliance.Auth.ValidationLogic.Contracts
 {
     public interface ITokenLogic
     {
-        string GenerateAccessToken(User user);
-        string GenerateRefreshToken(string username, string? deviceInfo, string? ipAddress = null);
-        IEnumerable<Claim> ReadJwtTokenClaims(string token);
-        ClaimsPrincipal ValidateJwtToken(string token);
+        Task<TokenModel> GenerateTokens(string username, string? userAgent, string? IpAddress, bool isRefresh);
+        ClaimsPrincipal? ValidateJwtToken(string token);
+        Task RevokeRefreshTokenAsync(string token, string? replacedByToken = null);
+        Task RevokeAllUserTokensAsync(string userId);
+        Task<string?> GetUserNameFromRefreshTokenAsync(string token);
     }
 }

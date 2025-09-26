@@ -5,7 +5,7 @@ using Compliance.Domain.Repositories.UsersRepos;
 using Compliance.Domain.Settings;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
-using Serilog;
+//using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +31,7 @@ builder.Services.AddCors(options =>
         });
 });
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+builder.Services.AddScoped<ITokenLogic, TokenLogic>();
 
 builder.Services.Configure<MongoDbSettings>(
     builder.Configuration.GetSection("MongoDB"));
@@ -39,16 +40,18 @@ builder.Services.AddSingleton<IMongoClient>(sp =>
     new MongoClient(sp.GetRequiredService<IOptions<MongoDbSettings>>().Value.ConnectionString)
 );
 
-builder.Services.AddScoped<IUserRepository>(sp =>
-    new UserRepository(sp.GetRequiredService<IMongoClient>().GetDatabase(
+builder.Services.AddScoped(sp =>
+    sp.GetRequiredService<IMongoClient>().GetDatabase(
         sp.GetRequiredService<IOptions<MongoDbSettings>>().Value.Database
-        ))
+        )
+);
+
+builder.Services.AddScoped<IUserRepository>(sp =>
+    new UserRepository(sp.GetRequiredService<IMongoDatabase>())
 );
 
 builder.Services.AddScoped<IRefreshTokenRepository>(sp =>
-    new RefreshTokenRepository(sp.GetRequiredService<IMongoClient>().GetDatabase(
-        sp.GetRequiredService<IOptions<MongoDbSettings>>().Value.Database
-        ))
+    new RefreshTokenRepository(sp.GetRequiredService<IMongoDatabase>())
 );
 
 builder.Services.AddSwaggerGen();

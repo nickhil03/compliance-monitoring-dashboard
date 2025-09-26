@@ -1,5 +1,6 @@
 ﻿using Compliance.Domain.Model;
 using MongoDB.Driver;
+using System.Linq.Expressions;
 
 namespace Compliance.Domain.Repositories.RefreshTokenRepos
 {
@@ -8,59 +9,30 @@ namespace Compliance.Domain.Repositories.RefreshTokenRepos
     {
         private readonly IMongoCollection<RefreshToken> _collection = database.GetCollection<RefreshToken>(nameof(RefreshToken));
 
-        public Task CreateRefreshTokenAsync(RefreshToken refreshToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task CreateRefreshTokenAsync(RefreshToken refreshToken, string hashedToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task DeleteRefreshTokenAsync(string id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<RefreshToken>> GetAllRefreshTokensAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<RefreshToken?> GetRefreshTokenByIdAsync(string id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<RefreshToken?> GetRefreshTokenByUserIdAsync(string userId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> IsValidRefreshTokenAsync(string token)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void RefreshToken(string refreshToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task RevokeRefreshTokenAsync(string token)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task SaveRefreshTokenAsync(RefreshToken refreshToken)
         {
             await _collection.InsertOneAsync(refreshToken);
         }
 
-        public Task UpdateRefreshTokenAsync(RefreshToken refreshToken)
+        public async Task UpdateRefreshTokenAsync(RefreshToken refreshToken)
         {
-            throw new NotImplementedException();
+            var filter = Builders<RefreshToken>.Filter.Eq(r => r.Id, refreshToken.Id);
+            await _collection.ReplaceOneAsync(filter, refreshToken);
+        }
+
+        public async Task<List<RefreshToken>> GetNonRevokedRefreshTokensAsync(params Expression<Func<RefreshToken, bool>>[] predicates)
+        {
+            var filterBuilder = Builders<RefreshToken>.Filter;
+            var filter = filterBuilder.Eq(r => r.IsRevoked, false);
+            if (predicates != null && predicates.Length != 0)
+            {
+                foreach (var predicate in predicates)
+                {
+                    filter &= filterBuilder.Where(predicate);
+                }
+            }
+
+            return await _collection.Find(filter).ToListAsync();
         }
     }
 }
