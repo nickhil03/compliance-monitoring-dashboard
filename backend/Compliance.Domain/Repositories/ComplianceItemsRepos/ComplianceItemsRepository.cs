@@ -5,30 +5,11 @@ namespace Compliance.Domain.Repositories.ComplianceItemsRepos
 {
     public class ComplianceItemsRepository(IMongoDatabase mongoDatabase) : IComplianceItemsRepository
     {
-        private readonly IMongoCollection<ComplianceRuleItems> _complianceItemsCollection = mongoDatabase.GetCollection<ComplianceRuleItems>("ComplianceItems");
-        public Task AddComplianceItemAsync(ComplianceRuleItems complianceItem)
-        {
-            throw new NotImplementedException();
-        }
+        private readonly IMongoCollection<ComplianceItems> _complianceItemsCollection = mongoDatabase.GetCollection<ComplianceItems>(nameof(ComplianceItems));
 
-        public Task DeleteComplianceItemAsync(string id)
+        public async Task<List<ComplianceItem>?> GetComplianceItemsByRuleAsync(string ruleId)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<ComplianceRuleItems>> GetAllComplianceItemsAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ComplianceRuleItems?> GetComplianceItemByIdAsync(string id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<List<ComplianceItems>?> GetComplianceItemsByRuleAsync(string ruleId)
-        {
-            var filter = Builders<ComplianceRuleItems>.Filter.Eq(item => item.Rule, ruleId);
+            var filter = Builders<ComplianceItems>.Filter.Eq(item => item.Rule, ruleId);
             var complianceRuleItem = await _complianceItemsCollection.Find(filter).FirstOrDefaultAsync();
             if (complianceRuleItem == null)
             {
@@ -36,11 +17,6 @@ namespace Compliance.Domain.Repositories.ComplianceItemsRepos
             }
 
             return complianceRuleItem.Items;
-        }
-
-        public Task UpdateComplianceItemAsync(ComplianceRuleItems complianceItem)
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Compliance.Domain.Model;
 using System.Linq.Expressions;
 
-namespace Compliance.Domain.Repositories.RefreshTokenRepos
+namespace Compliance.Domain.Repositories.TokenModel.RefreshTokenRepos
 {
     public interface IRefreshTokenRepository
     {

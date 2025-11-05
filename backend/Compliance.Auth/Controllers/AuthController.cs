@@ -1,5 +1,6 @@
 ﻿using Compliance.Auth.ValidationLogic.Contracts;
 using Compliance.Domain.Model;
+using Compliance.Domain.Repositories.TokenModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -55,16 +56,16 @@ namespace Compliance.Auth.Controllers
         }
 
         [HttpPost("validate")]
-        public IActionResult ValidateToken([FromBody] string accessToken)
+        public IActionResult ValidateToken([FromBody] TokenRequest request)
         {
-            if (string.IsNullOrEmpty(accessToken) || string.IsNullOrEmpty(Request.Cookies["refreshToken"]))
+            if (string.IsNullOrEmpty(request.Token) || string.IsNullOrEmpty(Request.Cookies["refreshToken"]))
             {
                 return BadRequest(new { message = "Token is required" });
             }
 
             try
             {
-                var principal = _tokenLogic.ValidateJwtToken(accessToken);
+                var principal = _tokenLogic.ValidateJwtToken(request.Token);
                 if (principal == null)
                 {
                     return Unauthorized(new { isValid = false, message = "Invalid token" });
@@ -159,8 +160,9 @@ namespace Compliance.Auth.Controllers
             {
                 HttpOnly = true,
                 Secure = true, // Set to true if using HTTPS
-                SameSite = SameSiteMode.Strict,
-                Expires = Expires // Set cookie expiry
+                SameSite = SameSiteMode.None,
+                Expires = Expires, // Set cookie expiry
+                IsEssential = true
             };
             Response.Cookies.Append("refreshToken", refreshToken, cookieOptions);
         }

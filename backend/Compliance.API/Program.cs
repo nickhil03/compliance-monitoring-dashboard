@@ -24,13 +24,14 @@ builder.Services.AddHttpClient();
 // Configure CORS to allow all origins, methods, and headers
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAllOrigins",
+    options.AddPolicy("AllowFrontEnd",
         builder =>
         {
-            builder.AllowAnyOrigin()
-              .AllowAnyMethod()
-              .AllowAnyHeader();
-    });
+            builder.WithOrigins("http://localhost:5173")
+            .AllowCredentials()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+        });
 });
 
 // Configure Swagger and OpenAPI
@@ -137,7 +138,7 @@ if (app.Environment.IsDevelopment())
 }
 
 //app.UseHttpsRedirection();
-app.UseCors("AllowAllOrigins");
+app.UseCors("AllowFrontEnd");
 app.UseRouting();
 
 // Custom authentication middleware

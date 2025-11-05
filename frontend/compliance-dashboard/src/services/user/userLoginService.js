@@ -6,10 +6,11 @@ const userLoginService = async (username, password) => {
       username,
       password,
     });
-    const token = res.data.token;
-    return token;
+    const accessToken = res.data.accessToken;
+    return accessToken;
   } catch (err) {
-    console.log("Invalid credentials");
+    console.log("Invalid credentials", err);
+    throw err;
   }
 };
 

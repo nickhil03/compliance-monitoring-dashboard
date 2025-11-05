@@ -11,15 +11,14 @@ const LoginPage = () => {
   const { handleLoginSuccess } = useAuth(); // Get the login success handler from AuthContext
 
   const handleLogin = async (e) => {
+    e.preventDefault();
+    setError("");
     try {
-      e.preventDefault();
-      setError("");
-
-      let token = await userLoginService(username, password);
-
-      if (token) {
-        localStorage.setItem("token", token);
-        handleLoginSuccess(true);
+      let accessToken = await userLoginService(username, password);
+      if (accessToken) {
+        localStorage.setItem("accessToken", accessToken);
+        sessionStorage.setItem("accessToken", accessToken);
+        handleLoginSuccess(true, accessToken);
         navigate("/dashboard");
       } else {
         setError("Invalid credentials. Please try again.");

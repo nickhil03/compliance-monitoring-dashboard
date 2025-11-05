@@ -1,11 +1,11 @@
 import complianceServiceHttp from "./complianceServiceHttp";
 
-const getComplianceItemsService = async () => {
+const getComplianceItemsService = async (rule) => {
   try {
     const { data } = await complianceServiceHttp.get(
       "/ComplianceItems/getByRuleId",
       {
-        params: { ruleId },
+        params: { ruleId: rule },
       }
     );
 

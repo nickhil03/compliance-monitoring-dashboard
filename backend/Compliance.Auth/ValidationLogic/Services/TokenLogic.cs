@@ -45,8 +45,7 @@ namespace Compliance.Auth.ValidationLogic.Services
                 throw new InvalidOperationException("JWT key is not configured.");
 
             var tokenHandler = new JwtSecurityTokenHandler();
-
-            var tokenValidationParameters = new TokenValidationParameters
+            var parameters = new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
@@ -54,27 +53,26 @@ namespace Compliance.Auth.ValidationLogic.Services
                 ValidIssuer = _configuration["Jwt:Issuer"],
                 ValidateAudience = true,
                 ValidAudience = _configuration["Jwt:Audience"],
-                ValidateLifetime = true,
-                ClockSkew = TimeSpan.Zero // Optional: helps account for server time differences
+                ValidateLifetime = false,
+                RequireSignedTokens = true,
+                RequireExpirationTime = true
             };
 
             try
             {
-                var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken validatedToken);
-                if (validatedToken is JwtSecurityToken jwtToken)
+                var principal = tokenHandler.ValidateToken(token, parameters, out SecurityToken validatedToken);
+                if (validatedToken is JwtSecurityToken jwtToken &&
+                    jwtToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    bool isHmac = jwtToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase);
-                    if (!isHmac)
-                    {
-                        return null; // Or throw an exception for unsupported algorithm
-                    }
+                    return principal;
                 }
-                return principal;
             }
             catch
             {
-                return null; // Token validation failed
+                return null;
             }
+
+            return null;
         }
 
         public async Task RevokeRefreshTokenAsync(string token, string? replacedByToken = null)

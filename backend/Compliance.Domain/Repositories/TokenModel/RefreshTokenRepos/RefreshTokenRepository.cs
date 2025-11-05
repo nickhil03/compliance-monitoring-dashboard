@@ -2,7 +2,7 @@
 using MongoDB.Driver;
 using System.Linq.Expressions;
 
-namespace Compliance.Domain.Repositories.RefreshTokenRepos
+namespace Compliance.Domain.Repositories.TokenModel.RefreshTokenRepos
 {
     public class RefreshTokenRepository(IMongoDatabase database)
         : IRefreshTokenRepository
@@ -16,7 +16,7 @@ namespace Compliance.Domain.Repositories.RefreshTokenRepos
 
         public async Task UpdateRefreshTokenAsync(RefreshToken refreshToken)
         {
-            var filter = Builders<RefreshToken>.Filter.Eq(r => r.Id, refreshToken.Id);
+            var filter = Builders<RefreshToken>.Filter.Eq(r => r._id, refreshToken._id);
             await _collection.ReplaceOneAsync(filter, refreshToken);
         }
 

@@ -5,7 +5,7 @@ const userDetailService = async () => {
     const res = await complianceServiceHttp.get("user/details");
 
     if (!res.data || Object.keys(res.data).length === 0) {
-      localStorage.removeItem("token");
+      localStorage.removeItem("accessToken");
       console.log("User details not found");
     }
     return res.data;

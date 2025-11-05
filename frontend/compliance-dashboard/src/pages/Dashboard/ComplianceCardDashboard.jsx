@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
 import getComplianceOverviewService from "../../services/compliance/getComplianceOverviewService";
 
-const ComplianceCardDashboard = () => {
+const ComplianceCardDashboard = ({ rule }) => {
   const [complianceOverview, setComplianceOverview] = useState([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      setComplianceOverview(await getComplianceOverviewService());
-    };
-    fetchData();
-  }, []);
+    if (rule) {
+      const fetchData = async () => {
+        setComplianceOverview(await getComplianceOverviewService(rule));
+      };
+      fetchData();
+    }
+  }, [rule]);
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">

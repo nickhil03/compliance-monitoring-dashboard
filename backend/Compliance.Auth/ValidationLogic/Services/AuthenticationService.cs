@@ -1,6 +1,6 @@
 ﻿using Compliance.Auth.ValidationLogic.Contracts;
 using Compliance.Domain.Model;
-using Compliance.Domain.Repositories.RefreshTokenRepos;
+using Compliance.Domain.Repositories.TokenModel.RefreshTokenRepos;
 using Compliance.Domain.Repositories.UsersRepos;
 using System.Linq.Expressions;
 

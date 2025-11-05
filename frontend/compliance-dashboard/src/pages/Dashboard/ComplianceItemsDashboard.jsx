@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
 import getComplianceItemsService from "../../services/compliance/getComplianceItemsService";
 
-const ComplianceItemsDashboard = () => {
+const ComplianceItemsDashboard = ({ rule }) => {
   const [complianceItems, setComplianceItems] = useState([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      setComplianceItems(await getComplianceItemsService());
-    };
-    fetchData();
-  }, []);
+    if (rule) {
+      const fetchData = async () => {
+        setComplianceItems(await getComplianceItemsService(rule));
+      };
+      fetchData();
+    }
+  }, [rule]);
 
   return (
     <div className="bg-white rounded-lg shadow-md p-6">

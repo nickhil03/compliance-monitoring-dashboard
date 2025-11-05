@@ -8,11 +8,12 @@ const App = () => {
     // Main container for the entire application
     <div className="min-h-screen bg-gray-100 font-sans antialiased flex flex-col">
       <script src="https://cdn.tailwindcss.com"></script>
-      <AuthProvider>
-        <BrowserRouter>
+      {/* Router must be outermost so AuthProvider and children can use react-router hooks */}
+      <BrowserRouter>
+        <AuthProvider>
           <AppRoutes />
-        </BrowserRouter>
-      </AuthProvider>
+        </AuthProvider>
+      </BrowserRouter>
     </div>
   );
 };

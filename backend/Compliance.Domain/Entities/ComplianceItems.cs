@@ -3,21 +3,36 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace Compliance.Domain.Entities
 {
-    public class ComplianceRuleItems
+    [BsonIgnoreExtraElements]
+    public class ComplianceItems
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public required string Id { get; set; }
+
+        [BsonElement("Rule")]
         public required string Rule { get; set; }
-        public List<ComplianceItems>? Items { get; set; }
+
+        [BsonElement("Items")]
+        public List<ComplianceItem>? Items { get; set; }
     }
 
-    public class ComplianceItems
+    [BsonIgnoreExtraElements]
+    public class ComplianceItem
     {
+        [BsonElement("id")]
         public string? Id { get; set; }
+
+        [BsonElement("Name")]
         public string? Name { get; set; }
+
+        [BsonElement("Status")]
         public string? Status { get; set; }
+
+        [BsonElement("Owner")]
         public string? Owner { get; set; }
-        public DateTime DueDate { get; set; }
+
+        [BsonElement("DueDate")]
+        public string? DueDate { get; set; }
     }
 }

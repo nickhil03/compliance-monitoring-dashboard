@@ -5,9 +5,9 @@ using MediatR;
 
 namespace Compliance.Application.Queries.Handler.ComplianceItemsHandler
 {
-    public record GetAllComplianceItemsQueryHandler(IComplianceItemsRepository ComplianceItemsRepository) : IRequestHandler<GetAllComplianceItemsQuery, List<ComplianceItems>>
+    public record GetAllComplianceItemsQueryHandler(IComplianceItemsRepository ComplianceItemsRepository) : IRequestHandler<GetAllComplianceItemsQuery, List<ComplianceItem>>
     {
-        public async Task<List<ComplianceItems>> Handle(GetAllComplianceItemsQuery request, CancellationToken cancellationToken)
+        public async Task<List<ComplianceItem>> Handle(GetAllComplianceItemsQuery request, CancellationToken cancellationToken)
         {
             var complianceItems = await ComplianceItemsRepository.GetComplianceItemsByRuleAsync(request.RuleId);
 

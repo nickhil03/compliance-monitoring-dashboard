@@ -13,10 +13,21 @@ namespace Compliance.API.Middleware
 
                 if (!string.IsNullOrEmpty(authorizationHeader))
                 {
-                    using var client = _httpClientFactory.CreateClient();
                     var authServiceUrl = _configuration["AuthServiceUrl"];
 
-                    var response = await client.PostAsJsonAsync($"{authServiceUrl}api/Auth/validate", new { Token = authorizationHeader });
+                    var requestMessage = new HttpRequestMessage(HttpMethod.Post, $"{authServiceUrl}api/Auth/validate")
+                    {
+                        Content = JsonContent.Create(new { Token = authorizationHeader })
+                    };
+
+                    // Forward cookies from the incoming request
+                    if (context.Request.Cookies.TryGetValue("refreshToken", out var refreshToken))
+                    {
+                        requestMessage.Headers.Add("Cookie", $"refreshToken={refreshToken}");
+                    }
+
+                    using var client = _httpClientFactory.CreateClient();
+                    var response = await client.SendAsync(requestMessage);
 
                     if (response.IsSuccessStatusCode)
                     {
