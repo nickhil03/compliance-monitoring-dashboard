@@ -5,10 +5,10 @@ namespace Compliance.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class UserDetailsController : ControllerBase
     {
-        [HttpGet("details")]
-        public IActionResult GetUserDetails()
+        [HttpGet]
+        public IActionResult Get()
         {
             return Ok(new
             {

@@ -8,7 +8,7 @@ namespace Compliance.API.Controllers
     [ApiController]
     public class ActivityController(IMediator mediator) : ControllerBase
     {
-        [HttpGet("getRecentActivities")]
+        [HttpGet]
         public async Task<IActionResult> GetRecentActivities()
         {
             var activities = await mediator.Send(new GetAllRecentActivitiesQuery());

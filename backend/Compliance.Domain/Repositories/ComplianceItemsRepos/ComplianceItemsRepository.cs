@@ -7,7 +7,7 @@ namespace Compliance.Domain.Repositories.ComplianceItemsRepos
     {
         private readonly IMongoCollection<ComplianceItems> _complianceItemsCollection = mongoDatabase.GetCollection<ComplianceItems>(nameof(ComplianceItems));
 
-        public async Task<List<ComplianceItem>?> GetComplianceItemsByRuleAsync(string ruleId)
+        public async Task<List<ComplianceDetail>?> GetComplianceItemsByRuleAsync(string ruleId)
         {
             var filter = Builders<ComplianceItems>.Filter.Eq(item => item.Rule, ruleId);
             var complianceRuleItem = await _complianceItemsCollection.Find(filter).FirstOrDefaultAsync();

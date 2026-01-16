@@ -2,9 +2,7 @@ import complianceServiceHttp from "./complianceServiceHttp";
 
 const getRecentActivitiesService = async () => {
   try {
-    const { data } = await complianceServiceHttp.get(
-      "/Activity/getRecentActivities"
-    );
+    const { data } = await complianceServiceHttp.get(`Activity`);
     if (!Array.isArray(data)) {
       throw new Error("Invalid response format");
     }

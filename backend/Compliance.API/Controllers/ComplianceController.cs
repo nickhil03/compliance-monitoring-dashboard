@@ -31,7 +31,7 @@ namespace Compliance.API.Controllers
             return Ok(result);
         }
 
-        [HttpPost("add-compliance")]
+        [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateComplianceResultCommand command)
         {
             var created = await _mediator.Send(command);
@@ -51,14 +51,6 @@ namespace Compliance.API.Controllers
         {
             await _mediator.Send(new DeleteComplianceResultCommand(id));
             return NoContent();
-        }
-
-        [HttpGet("compliance-pdf")]
-        public IActionResult GetComplianceReport()
-        {
-            // Simulate generating a PDF report
-            byte[] pdfBytes = System.IO.File.ReadAllBytes("path/to/compliance-report.pdf");
-            return File(pdfBytes, "application/pdf", "ComplianceReport.pdf");
         }
     }
 }

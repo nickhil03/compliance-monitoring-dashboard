@@ -54,7 +54,7 @@ const MainContentDashboard = () => {
             <SectionTitle activeNavItem={activeNavItem} />
             <ComplianceCardDashboard rule={activeNavItem} />
             <RecentActivitiesDashboard />
-            <ComplianceItemsDashboard rule={activeNavItem} />
+            <ComplianceItemsDashboard ruleId={activeNavItem} />
           </>
         )}
       </main>

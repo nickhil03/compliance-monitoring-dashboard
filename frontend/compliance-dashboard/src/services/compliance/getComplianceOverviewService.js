@@ -3,10 +3,7 @@ import complianceServiceHttp from "./complianceServiceHttp";
 const getComplianceOverviewService = async (rule) => {
   try {
     const { data } = await complianceServiceHttp.get(
-      "/ComplianceItems/getByRuleId",
-      {
-        params: { ruleId: rule },
-      }
+      `/ComplianceItems/${encodeURIComponent(rule)}`
     );
 
     // Normalize response to an array so UI components can map safely.

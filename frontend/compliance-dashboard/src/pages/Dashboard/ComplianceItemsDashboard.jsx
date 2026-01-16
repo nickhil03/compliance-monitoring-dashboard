@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
 import getComplianceItemsService from "../../services/compliance/getComplianceItemsService";
 
-const ComplianceItemsDashboard = ({ rule }) => {
+const ComplianceItemsDashboard = ({ ruleId }) => {
   const [complianceItems, setComplianceItems] = useState([]);
 
   useEffect(() => {
-    if (rule) {
+    if (ruleId) {
       const fetchData = async () => {
-        setComplianceItems(await getComplianceItemsService(rule));
+        setComplianceItems(await getComplianceItemsService(ruleId));
       };
       fetchData();
     }
-  }, [rule]);
+  }, [ruleId]);
 
   return (
     <div className="bg-white rounded-lg shadow-md p-6">
@@ -62,9 +62,9 @@ const ComplianceItemsDashboard = ({ rule }) => {
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {complianceItems.map((item) => (
-              <tr key={item.id}>
+              <tr key={item.itemId}>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                  {item.id}
+                  {item.itemId}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
                   {item.name}

@@ -4,6 +4,6 @@ namespace Compliance.Domain.Repositories.ComplianceItemsRepos
 {
     public interface IComplianceItemsRepository
     {
-        Task<List<ComplianceItem>?> GetComplianceItemsByRuleAsync(string ruleId);
+        Task<List<ComplianceDetail>?> GetComplianceItemsByRuleAsync(string ruleId);
     }
 }

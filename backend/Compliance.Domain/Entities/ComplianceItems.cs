@@ -14,14 +14,14 @@ namespace Compliance.Domain.Entities
         public required string Rule { get; set; }
 
         [BsonElement("Items")]
-        public List<ComplianceItem>? Items { get; set; }
+        public List<ComplianceDetail>? Items { get; set; }
     }
 
     [BsonIgnoreExtraElements]
-    public class ComplianceItem
+    public class ComplianceDetail
     {
-        [BsonElement("id")]
-        public string? Id { get; set; }
+        [BsonElement("Id")]
+        public string? ItemId { get; set; }
 
         [BsonElement("Name")]
         public string? Name { get; set; }

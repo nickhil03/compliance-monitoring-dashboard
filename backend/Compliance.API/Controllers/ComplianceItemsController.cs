@@ -8,7 +8,7 @@ namespace Compliance.API.Controllers
     [ApiController]
     public class ComplianceItemsController(IMediator mediator) : ControllerBase
     {
-        [HttpGet("getByRuleId")]
+        [HttpGet("{ruleId}")]
         public async Task<IActionResult> GetByRuleId(string ruleId)
         {
             try

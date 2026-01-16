@@ -8,8 +8,8 @@ namespace Compliance.API.Controllers
     [ApiController]
     public class ComplianceStatusController(IMediator mediator) : ControllerBase
     {
-        [HttpGet("get")]
-        public async Task<IActionResult> GetComplianceStatus()
+        [HttpGet]
+        public async Task<IActionResult> Get()
         {
             try
             {
